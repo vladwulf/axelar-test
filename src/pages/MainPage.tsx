@@ -1,15 +1,22 @@
 import { useLazyQuery } from '@apollo/client'
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
-import { GET_POOL_VOLUME_USD } from '../graphql/query'
+import { GET_POOL_VOLUME_USD } from '../graphql/query/index.graphql'
 import useDebounce from '../hooks/useDebounce'
 import { useStoreActions, useStoreState } from '../store/hooks'
 import { FromTokenBox, TokenSelectModal, ToTokenBox } from './parts'
+import {
+  GetPoolVolumeUSD,
+  GetPoolVolumeUSDVariables
+} from '../graphql/query/__generated__/GetPoolVolumeUSD'
 
 export const MainPage = () => {
   const { fromToken, toToken } = useStoreState(state => state)
   const { setToToken } = useStoreActions(state => state)
-  const [getPoolVolume, { data, loading }] = useLazyQuery(GET_POOL_VOLUME_USD)
+  const [getPoolVolume, { data, loading }] = useLazyQuery<
+    GetPoolVolumeUSD,
+    GetPoolVolumeUSDVariables
+  >(GET_POOL_VOLUME_USD)
 
   const debouncedFromTokenAmount = useDebounce(fromToken.amount, 500)
 

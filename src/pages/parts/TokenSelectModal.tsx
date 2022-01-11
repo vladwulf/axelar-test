@@ -5,9 +5,15 @@ import Skeleton from 'react-loading-skeleton'
 
 import { useStoreActions, useStoreState } from '../../store/hooks'
 import useDebounce from '../../hooks/useDebounce'
-import { GET_PAIRS, GET_TOKENS } from '../../graphql/query'
+import { GET_PAIRS, GET_TOKENS } from '../../graphql/query/index.graphql'
 import { ReactComponent as CloseIcon } from '../../assets/svg/close.svg'
 import { ModalOrigin } from '../../type'
+import { GetPairs, GetPairsVariables } from '../../graphql/query/__generated__/GetPairs'
+import {
+  GetTokens,
+  GetTokensVariables,
+  GetTokens_tokens
+} from '../../graphql/query/__generated__/GetTokens'
 
 export const TokenSelectModal = () => {
   const { modal, fromToken } = useStoreState(state => state)
@@ -16,13 +22,13 @@ export const TokenSelectModal = () => {
   const [tokenSearch, setTokenSearch] = useState<string>('')
   const debouncedTokenSearch = useDebounce(tokenSearch, 500)
 
-  const [tokens, setTokens] = useState([])
-  const [searchTokens, setSearchTokens] = useState([])
+  const [tokens, setTokens] = useState<GetTokens_tokens[]>([])
+  const [searchTokens, setSearchTokens] = useState<GetTokens_tokens[]>([])
 
-  const [getPairs, getPairsData] = useLazyQuery(GET_PAIRS, {
+  const [getPairs, getPairsData] = useLazyQuery<GetPairs, GetPairsVariables>(GET_PAIRS, {
     notifyOnNetworkStatusChange: true
   })
-  const [getTokens, getTokensData] = useLazyQuery(GET_TOKENS, {
+  const [getTokens, getTokensData] = useLazyQuery<GetTokens, GetTokensVariables>(GET_TOKENS, {
     notifyOnNetworkStatusChange: true
   })
 
